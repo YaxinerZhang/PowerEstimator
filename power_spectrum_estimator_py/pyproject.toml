@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools >= 61.0", "wheel", "Cython", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["power_spectrum_estimator_py"]
+
+[project]
+name = "power_spectrum_estimator_py"
+version = "0.0.1"
+description = "A package of power spectrum estimator_py"
+authors = [{name = "YaxinerZhang", email = "23373130@buaa.edu.cn"}]
+license = { file = "LICENSE" }
+requires-python = ">= 3.10"
+dependencies = ["matplotlib", "numpy", "Cython"]
+readme = { file = "README.md", content-type = "text/markdown" }
+
+[project.urls]
+Repository = "https://github.com/YaxinerZhang/PowerEstimator"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["test"]
