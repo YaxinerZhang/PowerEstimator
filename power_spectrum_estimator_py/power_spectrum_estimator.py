@@ -107,8 +107,8 @@ class Power_spectrum_estimator:
         if anti_aliasing == None:
             return density_k1
         if anti_aliasing == "interlacing":
-            pos1 = (pos - self.H/2) % self.L
-            density_r2 = _mass_assign(self.L, self.Ngrid, self.Np, pos1, mass, assigner)
+            pos = (pos - self.H/2) % self.L
+            density_r2 = _mass_assign(self.L, self.Ngrid, self.Np, pos, mass, assigner)
             density_k2 = np.fft.rfftn(density_r2)
             density_k2 *= self.H**3
             density_k2 *= np.exp(-1j*(self.kx + self.ky + self.kz)*self.H/2)

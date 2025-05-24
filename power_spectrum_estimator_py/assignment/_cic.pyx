@@ -1,10 +1,10 @@
 import numpy as np
 cimport numpy as cnp
 
-def _CIC_cython(cnp.float64_t[:, :] pos, int Ngrid, int Np, float H, mass = None):
+def _CIC_cython(cnp.float32_t[:, :] pos, int Ngrid, int Np, float H, mass = None):
     cdef int i, ix, iy, iz, x, y, z, nx, ny, nz
     cdef float px, py, pz, pmass, weight
-    cdef cnp.float64_t[:, :, :] density_r = np.zeros((Ngrid, Ngrid, Ngrid), dtype=np.float64)
+    cdef cnp.float32_t[:, :, :] density_r = np.zeros((Ngrid, Ngrid, Ngrid), dtype=np.float32)
     
     for i in range(len(pos)):
         px = pos[i][0] / H
