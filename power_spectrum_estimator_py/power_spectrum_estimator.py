@@ -111,12 +111,9 @@ class Power_spectrum_estimator:
             density_r2 = _mass_assign(self.L, self.Ngrid, self.Np, pos1, mass, assigner)
             density_k2 = np.fft.rfftn(density_r2)
             density_k2 *= self.H**3
+            density_k2 *= np.exp(-1j*(self.kx + self.ky + self.kz)*self.H/2)
+            density_k = 0.5 * (density_k1 + density_k2)
         
-            for i,kx in enumerate(self.ks):
-                for j,ky in enumerate(self.ks):
-                    for k,kz in enumerate(self.ks_z):
-                        density_k2[i,j,k]*= np.exp(-1j*(kx + ky +kz)*self.H/2)
-                        density_k[i,j,k] = 1/2*(density_k1[i,j,k] + density_k2[i,j,k])
             return density_k
         
     def get_pk_dft(self, pos: np.ndarray, mass: np.ndarray = None) -> np.ndarray:
