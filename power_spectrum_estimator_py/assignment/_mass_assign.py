@@ -49,24 +49,24 @@ class NGP(ParticleAssigner):
     """Nearest Grid Point"""
     def assign(self, pos:np.ndarray, mass:np.ndarray = None)-> np.ndarray:
         pos = self._wrap_periodic(pos)
-        _pos = np.array(pos, dtype=np.float64)
-        density_r = _NGP_cython(_pos, self.Ngrid, self.Np, self.H, mass)
+        pos = pos.astype(np.float32)
+        density_r = _NGP_cython(pos, self.Ngrid, self.Np, self.H, mass)
         return density_r
     
 class CIC(ParticleAssigner):
     """Cloud In Cell"""
     def assign(self, pos:np.ndarray, mass:np.ndarray = None)-> np.ndarray:
         pos = self._wrap_periodic(pos)
-        _pos = np.array(pos, dtype=np.float64)
-        density_r = _CIC_cython(_pos, self.Ngrid, self.Np, self.H, mass)
+        pos = pos.astype(np.float32)
+        density_r = _CIC_cython(pos, self.Ngrid, self.Np, self.H, mass)
         return density_r
     
 class TSC(ParticleAssigner):
     """Triangular Shaped Cloud"""
     def assign(self, pos:np.ndarray, mass:np.ndarray = None)-> np.ndarray:
         pos = self._wrap_periodic(pos)
-        _pos = np.array(pos, dtype=np.float64)
-        density_r = _TSC_cython(_pos, self.Ngrid, self.Np, self.H, mass)
+        pos = pos.astype(np.float32)
+        density_r = _TSC_cython(pos, self.Ngrid, self.Np, self.H, mass)
         return density_r
     
 def _mass_assign(L: float, Ngrid: int, Np: int, pos: np.ndarray, mass: np.ndarray = None, option="NGP") -> np.ndarray:

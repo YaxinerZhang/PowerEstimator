@@ -3,10 +3,15 @@ cimport numpy as cnp
 
 def _TSC_cython(cnp.float32_t[:, :] pos, int Ngrid, int Np, float H, mass = None):
     cdef int i, ix, iy, iz, x, y, z, nx, ny, nz
-    cdef float px, py, pz, dx, dy, dz, pmass, weight
+    cdef float px, py, pz, dx, dy, dz, weight
     cdef list wx = [], wy = [], wz = []
     cdef cnp.float32_t[:, :, :] density_r = np.zeros((Ngrid, Ngrid, Ngrid), dtype=np.float32)
     
+    if mass is None:
+        mass = np.ones(Np, dtype=np.float32)
+    else:
+        mass = mass.astype(np.float32)
+
     for i in range(len(pos)):
         px = pos[i][0] / H
         py = pos[i][1] / H
@@ -23,11 +28,6 @@ def _TSC_cython(cnp.float32_t[:, :] pos, int Ngrid, int Np, float H, mass = None
         wy = _WTSC(dy)
         wz = _WTSC(dz)
 
-
-        if mass == None:
-            pmass = 1.0 
-        else:
-            pmass = mass[i]
         
         for ix in [-1, 0, 1]:
             for iy in [-1, 0, 1]:
@@ -35,7 +35,7 @@ def _TSC_cython(cnp.float32_t[:, :] pos, int Ngrid, int Np, float H, mass = None
                     nx = (x + ix) % Ngrid
                     ny = (y + iy) % Ngrid
                     nz = (z + iz) % Ngrid
-                    weight = wx[ix+1] * wy[iy+1] * wz[iz+1] * pmass
+                    weight = wx[ix+1] * wy[iy+1] * wz[iz+1] * mass[i]
                     density_r[nx, ny, nz] += weight 
       
     return np.asarray(density_r)

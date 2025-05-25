@@ -3,8 +3,13 @@ cimport numpy as cnp
 
 def _NGP_cython(cnp.float32_t[:, :] pos, int Ngrid, int Np, float H, mass = None):
     cdef int i, x, y, z, nx, ny, nz
-    cdef float px, py, pz, pmass
+    cdef float px, py, pz
     cdef cnp.float32_t[:, :, :] density_r = np.zeros((Ngrid, Ngrid, Ngrid), dtype=np.float32)
+
+    if mass is None:
+        mass = np.ones(Np, dtype=np.float32)
+    else:
+        mass = mass.astype(np.float32)
 
     for i in range(len(pos)):
         px = pos[i][0] / H
@@ -13,13 +18,9 @@ def _NGP_cython(cnp.float32_t[:, :] pos, int Ngrid, int Np, float H, mass = None
         x = int(np.round(px))
         y = int(np.round(py))
         z = int(np.round(pz))
-        if mass == None:
-            pmass = 1.0 
-        else:
-            pmass = mass[i]
-
+       
         nx = x % Ngrid
         ny = y % Ngrid
         nz = z % Ngrid
-        density_r[nx, ny, nz] += pmass 
+        density_r[nx, ny, nz] += mass[i] 
     return np.asarray(density_r)
